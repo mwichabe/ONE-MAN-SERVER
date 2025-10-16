@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 5000;
 // --- MIDDLEWARE CONFIGURATION ---
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://one-man-botique.pages.dev",
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
