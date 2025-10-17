@@ -22,9 +22,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // --- MIDDLEWARE CONFIGURATION ---
+
+const allowedOrigins = [
+    "https://one-man-botique.pages.dev",
+    "http://localhost:5173" 
+];
 app.use(
   cors({
-    origin: "https://one-man-botique.pages.dev",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
