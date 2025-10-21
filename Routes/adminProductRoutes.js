@@ -15,7 +15,7 @@ const { protect, admin } = require('../Middleware/authMiddleware');
 
 // 3. Define routes using the functions (getProducts, createProduct, etc.)
 router.get("/random", getRandomProduct);
-// Assuming line 21 is here:
+router.get("/public-list", protect, getProducts);
 router.route('/')
     .get(protect, getProducts) // ✅ getProducts is a function
     .post(protect, createProduct);

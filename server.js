@@ -36,8 +36,30 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(express.json()); // Allows parsing of JSON request bodies
-app.use(express.urlencoded({ extended: false })); // Allows parsing of URL-encoded data
+app.use('/api/orders/paystack-webhook', express.raw({ type: 'application/json' }));
+// We use a middleware to re-add JSON parsing for routes that are NOT the webhook
+app.use((req, res, next) => {
+    // Only parse the body as JSON if the route is NOT the webhook route
+    if (req.originalUrl.startsWith('/api/orders/paystack-webhook')) {
+        // For the webhook, we must parse the raw body into JSON 
+        // and attach the original buffer for the hash calculation in the controller.
+        try {
+            req.paystackRawBody = req.body.toString('utf8');
+            req.body = JSON.parse(req.paystackRawBody);
+        } catch (e) {
+            console.error('Error parsing raw webhook body:', e);
+            return res.sendStatus(400); // Bad Request if body isn't JSON
+        }
+    } else {
+        // For all other routes, use standard JSON parsing
+        express.json()(req, res, next);
+        return;
+    }
+    next();
+});
+
+// Ensures URL-encoded data works for non-webhook forms
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.send("API is running...");
@@ -51,6 +73,8 @@ app.use("/api/cart",cartRoutes);
 app.use('/api/orders', orderRoute);
 app.use('/api/contact',contactRoute);
 app.use('/api/subscribe',subscribeRoute);
+
+app.use(errorHandler);
 
 // --- SERVER START ---
 app.listen(PORT, () => console.log(`Server is now running on PORT ${PORT}`));
