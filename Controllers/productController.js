@@ -74,6 +74,22 @@ const updateProduct = asyncHandler(async (req, res) => {
     res.status(200).json(updatedProduct);
 });
 /**
+ * @desc    Get a single product by ID (Public for detail view)
+ * @route   GET /api/admin/products/:id
+ * @access  Public
+ */
+const getProductById = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+
+    res.status(200).json(product);
+});
+
+/**
  * @desc    Get a single random product for the home page/discount showcase
  * @route   GET /api/products/random
  * @access  Public
@@ -124,5 +140,6 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
-    getRandomProduct
+    getRandomProduct,
+    getProductById
 };

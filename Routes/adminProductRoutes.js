@@ -5,9 +5,10 @@ const router = express.Router();
 const { 
     getProducts, 
     createProduct, 
-    updateProduct, 
+    updateProduct,
     getRandomProduct,
-    deleteProduct 
+    deleteProduct,
+    getProductById 
 } = require('../Controllers/productController'); // This path must be correct!
 
 // 2. Import your middleware (assuming correct path)
@@ -15,9 +16,10 @@ const { protect, admin } = require('../Middleware/authMiddleware');
 
 // 3. Define routes using the functions (getProducts, createProduct, etc.)
 router.get("/random", getRandomProduct);
-router.get("/public-list", protect, getProducts);
+router.get("/public-list", getProducts); // Public endpoint for landing page
+router.get("/:id", getProductById); // Public route for product details
 router.route('/')
-    .get(protect, getProducts) // ✅ getProducts is a function
+    .get(getProducts) // Public GET for products
     .post(protect, createProduct);
 
 router.route('/:id')
