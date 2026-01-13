@@ -8,6 +8,7 @@ const cartRoutes = require("./Routes/cart");
 const orderRoute = require("./Routes/orderRoutes");
 const contactRoute = require("./Routes/contactRoutes");
 const subscribeRoute = require("./Routes/subscriberRoute");
+const reviewRoutes = require("./Routes/reviewRoutes");
 const { errorHandler } = require("./Middleware/errorHandler");
 
 // --- DATABASE CONNECTION ---
@@ -74,6 +75,7 @@ app.use("/api/cart", cartRoutes);
 app.use('/api/orders', orderRoute);
 app.use('/api/contact', contactRoute);
 app.use('/api/subscribe', subscribeRoute);
+app.use('/api/reviews', reviewRoutes);
 
 app.use(errorHandler);
 
